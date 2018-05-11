@@ -1,0 +1,66 @@
+{% extends "Warehouse/base.html" %}
+{% block content %}
+
+
+{% if messages %}
+messages:<br>
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+<h3>Order Details</h3>
+
+
+<table class="detail">
+<tr>
+	<td>Warehouse ID:</td>
+	<td>{{ order.id}}</td>
+</tr>
+<tr>
+	<td>Store ID:</td>
+	<td>{{ order.store_id }}</td>
+</tr>
+<tr>
+	<td>Store Order ID:</td>
+	<td>{{ order.store_order_id }}</td>
+</tr>
+<tr>
+	<td>Customer:</td>
+	<td>{{ order.customer }}</td>
+</tr>
+<tr>
+	<td>Purchased Date:</td>
+	<td>{{ order.purchased_date }}</td>
+</tr>
+<tr>
+	<td>Status:</td>
+	<td>{{ order.get_status_display }}</td>
+</tr>
+</table>
+
+{% if order.status == 'I' %}
+
+<h4>Ship/Cancel Order</h4>
+
+<form method="get" action="{% url 'warehouse:update' order.id %}">
+<input class="shipcncl" type="submit" name="button" value="Ship/Fulfill This Order">
+<input type="hidden" name="s" value="S">
+</form>
+
+<form method="get" action="{% url 'warehouse:update' order.id %}">
+<input class="shipcncl" type="submit" name="button" value="Cancel">
+<input type="hidden" name="s" value="C">
+</form>
+
+{% else %}
+<h4>Status</h4>
+{{ order.get_status_display }} at {{ order.updated_date }}<br>
+{% endif %}
+
+
+{% endblock %}
+

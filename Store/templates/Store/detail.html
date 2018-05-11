@@ -1,0 +1,66 @@
+{% extends "Store/base.html" %}
+{% block content %}
+
+
+<h3>Order Details</h3>
+
+<!-- Table or CSS/Bootstrap? -->
+<table class="detail">
+<tr>
+	<td>Order ID:</td>
+	<td>{{ order.id }}</td>
+</tr>
+<tr>
+	<td>Customer:</td>
+	<td>{{ order.customer }}</td>
+</tr>
+<tr>
+	<td>Purchased Date:</td>
+	<td>{{ order.purchase_date }}</td>
+</tr>
+<tr>
+	<td>Status:</td>
+	<td>{{ order.get_status_display }}</td>
+</tr>
+</table>
+
+{% if order.status == 'P' %}
+<p style="margin-top: 20px;"><span class="warning">This Order is still Pending and not in the Warehouse system!</span> Please use the form below to re-submit the order:</p>
+{% endif %}
+
+
+
+
+<h4>Update/Cancel Order</h4>
+
+{% if messages %}
+{% for message in messages %}
+<span class="warning">{{ message }}</span>
+{% endfor %}
+{% endif %}
+
+
+<!-- Table or CSS/Bootstrap? -->
+<form class="form-horizontal" action="{% url 'store:update' order.id %}" method="post">
+{% csrf_token %}
+<div class="form-group">
+<label class="control-label col-sm-4">Update Customer Name:</label>
+<div class"col-sm-8"><input type="text" name="new_customer" value="{{ order.customer }}"><input type="submit" name="button" value="Submit Order"></div>
+</div>
+</form>
+
+<form class="form-horizontal" action="{% url 'store:cancel' order.id %}" method="post">
+{% csrf_token %}
+<div class="form-group" style="margin-top: 30px;">
+<label class="control-label col-sm-4">Cancel this order:</label>
+<div class"col-sm-8"><input type="submit" name="button" value="Cancel Order"></div>
+</div>
+
+</form>
+
+<p style="margin-top: 20px;">Note, orders already Shipped or Cancelled from the Warehouse cannot be changed.  Updating here will demonstrate an API denial.</p>
+
+
+
+
+{% endblock %}

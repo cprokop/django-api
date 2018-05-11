@@ -1,0 +1,94 @@
+
+
+body {
+	background: #F7F5E6;
+	font-family: futura;
+	margin: 0px;
+	padding-bottom: 50px;
+	color: black;
+}
+
+#header {
+	margin: 0;
+	padding: 5px 5px 5px 40px;
+	border-bottom: 5px solid #333A56;
+}
+
+#header a:link, #header a:visited {
+	font-weight: bold;
+	font-size: large;
+	color: black;
+}
+
+#header .rightside {
+	text-align: right;
+}
+
+#content {
+	padding-left: 0px;
+}
+
+#content h4 {
+	padding-top: 20px;
+	padding-bottom: 10px;
+}
+
+td.pending_red {
+	color: red;
+}
+
+.warning {
+	color: red;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+
+.orders {
+	color: #333;
+	border-collapse: collapse;
+	width: 70%;
+}
+
+
+.orders td, .orders th {
+	border: 1px solid #CCC;
+	height: 30px;
+	padding-left: 10px;
+} 
+
+.orders th {
+	background: #F3F3F3; /* Light grey background */
+	font-weight: bold; /* Make sure they're bold */
+	text-align: center;
+}
+
+.orders td {  
+	background: #FAFAFA; /* Lighter grey background */
+	text-align: left;
+}
+
+
+td.number {
+	width: 15%;
+	text-align: right;
+	padding-right: 50px;
+	padding-left: 0px;
+}
+
+
+.detail {
+	color: #333;
+	border-collapse: collapse;
+	width: 40%;
+}
+
+
+.detail td {
+	border: 1px solid #CCC;
+	height: 30px;
+	padding-left: 10px;
+	background: #FAFAFA; /* Lighter grey background */
+	text-align: left;
+}
+
+

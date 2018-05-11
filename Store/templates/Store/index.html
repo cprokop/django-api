@@ -1,0 +1,52 @@
+{% extends "Store/base.html" %}
+{% block content %}
+
+<h3>Welcome to Store!</h3>
+
+<p>Here one can create an order.  It's first saved to the local DB and then sent over to the Warehouse though an API call.  It will then sit and wait for Warehouse processing.  During that time, changes can be made to the order.</p>
+
+
+<h4>Create New Order:</h4>
+
+{% if messages %}
+	{% for message in messages %}
+<span class="warning">{{ message }}</span>
+	{% endfor %}
+{% endif %}
+
+<form action="{% url 'store:create' %}" method="post">
+{% csrf_token %}
+Customer Name: <input type="text" name="customer" value="">
+<input type="submit" name="button" value="Submit Order">
+<input type="checkbox" name="fail" value="1">(force API to fail)
+
+</form>
+
+
+<h4>Current Orders:</h4>
+
+<table class="orders">
+<tr>
+	<th>Order ID</th>
+	<th>Customer</th>
+	<th>Purchased Date</th>
+	<th>Status</th>
+</tr>
+
+{% if object_list %}
+{% for order in object_list %}
+<tr>
+	<td class="number"><a href="{% url 'store:detail' order.id %}">{{ order.id }}</a></td>
+	<td>{{ order.customer }}</td>
+	<td>{{ order.purchase_date }}</td>
+	<td{% if order.status == 'P' %} class="pending_red"{% endif %}>{{ order.get_status_display }}</td>
+</tr>
+{% endfor %}
+
+{% else %}
+	<tr><td colspan="4">No Orders at this point</td></tr>
+{% endif %}
+
+</table>
+
+{% endblock %}
