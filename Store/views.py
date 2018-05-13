@@ -10,19 +10,27 @@ import json
 import requests
 
 
-WAREHOUSE_URL = "http://py.cpcoding.com/warehouse/api/"
+WAREHOUSE_URL = "http://HOST/warehouse/api/"
 STORE_ID = 1
 
+"""
+Main Index View for listing Orders
+"""
 class IndexView(generic.ListView):
 	model = Order
 	template_name = 'Store/index.html'
 	ordering = ['-purchase_date']
 
-
+"""
+Display Order Details
+"""
 class DetailView(generic.DetailView):
 	model = Order
 	template_name = 'Store/detail.html'
 
+"""
+Cancel an Order
+"""
 def cancel(request,id):
 	try:
 		order = Order.objects.get(id=id)
@@ -45,7 +53,9 @@ def cancel(request,id):
 	return redirect('store:detail', pk=id )
 
 
-
+"""
+Update an order and attempt to send to the Warehouse
+"""
 def update(request,id):
 	try:
 		order = Order.objects.get(id=id)
@@ -78,6 +88,9 @@ def update(request,id):
 	return redirect('store:detail', pk=id )
 
 
+"""
+Create a New Order
+"""
 def create(request):
 	customer = request.POST['customer']
 
@@ -112,6 +125,9 @@ def create(request):
 
 
 
+"""
+Call the Warehouse API
+"""
 def makecall(order):
 	data = {
 	   'store_id': STORE_ID,
@@ -139,6 +155,9 @@ def makecall(order):
 
 
 
+"""
+Receive Incoming Messages from the Warehouse
+"""
 def api(request):
 
 	try:
@@ -169,7 +188,9 @@ def api(request):
 	return HttpResponse( json.dumps( {'OK': thisid } ) )
 
 
-
+"""
+Generate and Format a JSON Error used with the API
+"""
 def api_error(msg):
 	return HttpResponse( json.dumps( {'error': msg } ) )
 

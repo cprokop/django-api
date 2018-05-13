@@ -9,24 +9,29 @@ import json
 import requests
 
 
-STORE_URL = "http://py.cpcoding.com/store/api/"
+STORE_URL = "http://HOST/store/api/"
 
 
+"""
+Main Index View for listing Orders
+"""
 class IndexView(generic.ListView):
 	model = Order
 	template_name = 'Warehouse/index.html'
 	ordering = ['-purchased_date']
 
 
-	# filter_status = request.GET.get('status', 'I')
-	# order_list = Order.objects.filter(status=filter_status).order_by('-purchased_date')
-
+"""
+Display Order Details
+"""
 class DetailView(generic.DetailView):
 	model = Order
 	template_name = 'Warehouse/detail.html'
 
 
-
+"""
+Update an Order and Notify the Store
+"""
 def update(request,id):
 	order = Order.objects.get(id=id)
 	new_status = request.GET.get('s', 'I' )
@@ -39,6 +44,7 @@ def update(request,id):
 	order.updated_date=timezone.now()
 	order.save()
 
+	## Notify the store
 	result = makecall(order)
 
 	## Check for errors, if so, flag error for human intervention
@@ -50,7 +56,9 @@ def update(request,id):
 	return redirect('warehouse:detail',pk=id)
 
 
-
+"""
+Call the Store API
+"""
 def makecall(order):
 	data = {
 	   'id': order.store_order_id,
@@ -74,6 +82,9 @@ def makecall(order):
 
 
 
+"""
+Receive Incoming Messages from the Store
+"""
 def api(request):
 
 	try:
@@ -96,7 +107,6 @@ def api(request):
 		return api_error("Did not receive all Order information.")
 
 	## Is this a new or existing order?
-
 	try:
 		existing = Order.objects.get(store_id=store_id, store_order_id=local_id )
 	except:
@@ -121,8 +131,9 @@ def api(request):
 	return HttpResponse( json.dumps( {'OK': local_id } ) )
 
 
-
-
+"""
+Generate and Format a JSON Error used with the API
+"""
 def api_error(msg):
 	return HttpResponse( json.dumps( {'error': msg } ) )
 	
